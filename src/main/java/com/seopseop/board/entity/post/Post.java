@@ -48,9 +48,10 @@ public class Post extends JpaBaseTimeEntity {
         this.view = 0L;
     }
 
-    public void updatePost (String title, String content) {
+    public void updatePost (String title, String content, Long id) {
         this.title = title;
         this.content = content;
+        this.id = id;
     }
 
     public void deletePost () {
