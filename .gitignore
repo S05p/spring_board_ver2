@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+
+/Users/gimgangseob/board/src/main/resources/application.properties
