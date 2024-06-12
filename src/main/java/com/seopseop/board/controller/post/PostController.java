@@ -42,7 +42,7 @@ public class PostController {
 
 
 
-        return "redirect:/detail"+;
+        return "redirect:/detail";
 
     }
 }
