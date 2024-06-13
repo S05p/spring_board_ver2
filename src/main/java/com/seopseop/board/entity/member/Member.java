@@ -2,12 +2,15 @@ package com.seopseop.board.entity.member;
 
 import com.seopseop.board.entity.JpaBaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends JpaBaseTimeEntity {
 
     @Id

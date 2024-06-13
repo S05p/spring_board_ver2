@@ -5,7 +5,9 @@ import com.seopseop.board.entity.JpaBaseTimeEntity;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.post.Post;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends JpaBaseTimeEntity {
 
     @Id

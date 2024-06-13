@@ -14,48 +14,48 @@
 <div>
     <h4 th:text="${post.title}"></h4>
     <p th:text="${post.content}"></p>
-    <p th:text="${post.member.nickname}"> </p>
+    <p th:text="${post.post_writer.nickname}"> </p>
 </div>
 
-<div th:if="${not results.empty}">
-    <div th:each="i: ${results}">
-        <p th:text="${i.content}"></p>
-    </div>
-</div>
+<!--<div th:if="${not results.empty}">-->
+<!--    <div th:each="i: ${results}">-->
+<!--        <p th:text="${i.content}"></p>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div th:if="${user != null}">
-    <form th:action="@{'/detail/'+${post.id}+'/create_comment'}" method="POST">
-        <input type="text" name="content">
-        <input type="submit" value="댓글작성">
-    </form>
-</div>
+<!--<div th:if="${user != null}">-->
+<!--    <form th:action="@{'/detail/'+${post.id}+'/create_comment'}" method="POST">-->
+<!--        <input type="text" name="content">-->
+<!--        <input type="submit" value="댓글작성">-->
+<!--    </form>-->
+<!--</div>-->
 
-<div th:if="${not results.empty}">
-    <div>
-        <ul class="pagination">
-            <!-- Previous button -->
-            <li th:if="${currentPage > 1}">
-                <a th:href="@{'/detail/'+${post.id}}">첫 페이지</a>
-            </li>
+<!--<div th:if="${not results.empty}">-->
+<!--    <div>-->
+<!--        <ul class="pagination">-->
+<!--            &lt;!&ndash; Previous button &ndash;&gt;-->
+<!--            <li th:if="${currentPage > 1}">-->
+<!--                <a th:href="@{'/detail/'+${post.id}}">첫 페이지</a>-->
+<!--            </li>-->
 
-            <!-- Page numbers -->
-            <li th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
-                <a th:if="${pageNum != currentPage}" th:href="@{'/detail/' + ${post.id} + '?comment_page=' + ${pageNum}}" th:text="${pageNum}"></a>
-                <span th:if="${pageNum == currentPage}" th:text="${pageNum}" class="active"></span>
-            </li>
+<!--            &lt;!&ndash; Page numbers &ndash;&gt;-->
+<!--            <li th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">-->
+<!--                <a th:if="${pageNum != currentPage}" th:href="@{'/detail/' + ${post.id} + '?comment_page=' + ${pageNum}}" th:text="${pageNum}"></a>-->
+<!--                <span th:if="${pageNum == currentPage}" th:text="${pageNum}" class="active"></span>-->
+<!--            </li>-->
 
-            <!-- Next button -->
-            <li th:if="${currentPage < totalPages  && endPage >= currentPage +10}">
-                <a th:href="@{'/detail/' + ${post.id} + '?comment_page=' + ${currentPage + 10}}">다음 페이지</a>
-            </li>
+<!--            &lt;!&ndash; Next button &ndash;&gt;-->
+<!--            <li th:if="${currentPage < totalPages  && endPage >= currentPage +10}">-->
+<!--                <a th:href="@{'/detail/' + ${post.id} + '?comment_page=' + ${currentPage + 10}}">다음 페이지</a>-->
+<!--            </li>-->
 
-            <li th:if="${currentPage < totalPages && endPage < currentPage +10}">
-                <a th:href="@{'/detail/' + ${post.id} + '?comment_page=' + ${endPage}}">다음 페이지</a>
-            </li>
+<!--            <li th:if="${currentPage < totalPages && endPage < currentPage +10}">-->
+<!--                <a th:href="@{'/detail/' + ${post.id} + '?comment_page=' + ${endPage}}">다음 페이지</a>-->
+<!--            </li>-->
 
-        </ul>
-    </div>
-</div>
+<!--        </ul>-->
+<!--    </div>-->
+<!--</div>-->
 
 </body>
 </html>
