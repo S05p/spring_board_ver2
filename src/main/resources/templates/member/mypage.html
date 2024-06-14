@@ -32,17 +32,17 @@
     <ul class="pagination">
         <!-- Previous button -->
         <li th:if="${currentPage > 1}">
-            <a th:href="@{/user/mypage/1}">첫 페이지</a>
+            <a th:href="@{/user/mypage/post/1}">첫 페이지</a>
         </li>
 
         <!-- Page numbers -->
         <li th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
-            <a th:if="${pageNum != currentPage}" th:href="@{/user/mypage/{page}(page=${pageNum})}" th:text="${pageNum}"></a>
+            <a th:if="${pageNum != currentPage}" th:href="@{/user/mypage/post/{page}(page=${pageNum})}" th:text="${pageNum}"></a>
             <span th:if="${pageNum == currentPage}" th:text="${pageNum}" class="active"></span>
         </li>
         <!-- Next button -->
         <li th:if="${currentPage < totalPages}">
-            <a th:href="@{/user/mypage/{page}(page=${currentPage + 10})}">다음 페이지</a>
+            <a th:href="@{/user/mypage/post/{page}(page=${currentPage + 10})}">다음 페이지</a>
         </li>
 
     </ul>

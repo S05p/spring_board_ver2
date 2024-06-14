@@ -1,6 +1,7 @@
 package com.seopseop.board.controller.member;
 
 
+import com.seopseop.board.DTO.member.MemberSaveDTO;
 import com.seopseop.board.Exception.NotAuthorityState;
 import com.seopseop.board.Exception.NotExistPageException;
 import com.seopseop.board.Exception.Notequalpassword;
@@ -47,7 +48,6 @@ public class MemberController {
                               @RequestParam String password1,
                               @RequestParam String password2,
                               @RequestParam String nickname) {
-
         Optional<Member> result = memberRepository.findByUsername(username);
         if (result.isPresent()) {
             return "redirect:/user/signup?error=username_exist";
@@ -56,8 +56,8 @@ public class MemberController {
             return "redirect:/user/signup?error=password_problem";
         }
         var hashed = new BCryptPasswordEncoder().encode(password1);
-
-        memberRepository.save(new Member(username,hashed,nickname));
+        MemberSaveDTO memberSaveDTO = new MemberSaveDTO(username,hashed,nickname);
+        memberService.signup(memberSaveDTO);
 
         return "redirect:/list/1";
     }

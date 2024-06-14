@@ -1,15 +1,19 @@
 package com.seopseop.board.controller.post;
 
+import com.seopseop.board.DTO.comment.CommentSaveDTO;
 import com.seopseop.board.DTO.post.PostSaveDTO;
 import com.seopseop.board.DTO.post.PostUpdateDTO;
 import com.seopseop.board.Exception.NotAuthorOfPost;
 import com.seopseop.board.Exception.NotAuthoritytoCreatePostException;
 import com.seopseop.board.Exception.NotExistPageException;
 import com.seopseop.board.Exception.NotExistPostException;
+import com.seopseop.board.entity.comment.Comment;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.post.Post;
+import com.seopseop.board.repository.comment.CommentRepository;
 import com.seopseop.board.repository.member.MemberRepository;
 import com.seopseop.board.repository.post.PostRepository;
+import com.seopseop.board.service.comment.CommentService;
 import com.seopseop.board.service.member.MemberService;
 import com.seopseop.board.service.post.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +36,8 @@ public class PostController {
     private final PostService postService;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
+    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
     @GetMapping("/list/{page}")
     public String List (@PathVariable Long page,
@@ -130,12 +137,46 @@ public class PostController {
     }
 
     @GetMapping("/detail/{post_id}")
-    public String Detail (@PathVariable Long post_id,
-                          Model model) {
+    public String GetDetail (@PathVariable Long post_id,
+                          Model model,
+                             Authentication auth) {
         Optional<Post> result = postRepository.findById(post_id);
         Post post = result.orElseThrow(()-> new NotExistPostException());
         model.addAttribute("post",post);
+        model.addAttribute("user",auth.getName());
         return "post/detail.html";
+    }
+
+    @PostMapping("/detail/{post_id}/{comment_id}")
+    public String PostDetailComment (@PathVariable Long post_id,
+                              @PathVariable Long comment_id,
+                              @RequestParam String content,
+                              Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new NotAuthorOfPost();
+        }
+        Optional<Member> result = memberRepository.findByUsername(auth.getName());
+        Member member = result.orElseThrow(() -> new NotExistPostException());
+        Post post = postService.findById(post_id);
+        Optional<Comment> com = commentRepository.findById(comment_id);
+        Comment com2 = com.orElseThrow(()-> new NotExistPostException());
+        CommentSaveDTO commentSaveDTO = new CommentSaveDTO(content,member,post,com2);
+        commentService.saveComment(commentSaveDTO);
+        return "redirect:/detail"+post_id;
+    }
+    @PostMapping("/detail/{post_id}")
+    public String PostDetail (@PathVariable Long post_id,
+                              @RequestParam String content,
+                              Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new NotAuthorOfPost();
+        }
+        Optional<Member> result = memberRepository.findByUsername(auth.getName());
+        Member member = result.orElseThrow(() -> new NotExistPostException());
+        Post post = postService.findById(post_id);
+        CommentSaveDTO commentSaveDTO = new CommentSaveDTO(content,member,post,null);
+        commentService.saveComment(commentSaveDTO);
+        return "redirect:/detail/"+post_id;
     }
 
 

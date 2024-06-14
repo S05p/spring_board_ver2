@@ -1,6 +1,7 @@
 package com.seopseop.board.service.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.seopseop.board.DTO.member.MemberSaveDTO;
 import com.seopseop.board.Exception.NotExistMember;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.member.QMember;
@@ -32,11 +33,13 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void passwordChange(Member member, String password) {
         member.passwordChange(password);
+        memberRepository.save(member);
     }
 
     @Override
     public void resign (Member member) {
         member.resign();
+        memberRepository.save(member);
     }
 
     @Override
@@ -48,6 +51,12 @@ public class MemberServiceImpl implements MemberService{
         if (mem == null) {
             throw new NotExistMember();
         }
+        return mem;
+    }
+    @Override
+    public Member signup (MemberSaveDTO memberSaveDTO) {
+        Member mem = new Member(memberSaveDTO.getUsername(),memberSaveDTO.getPassword(),memberSaveDTO.getNickname());
+        memberRepository.save(mem);
         return mem;
     }
 }

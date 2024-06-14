@@ -1,4 +1,10 @@
 package com.seopseop.board.service.comment;
 
-public class CommentService {
+import com.seopseop.board.DTO.comment.CommentSaveDTO;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CommentService {
+
+    Long saveComment(CommentSaveDTO commentSaveDTO);
 }

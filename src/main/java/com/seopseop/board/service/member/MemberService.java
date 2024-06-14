@@ -1,5 +1,6 @@
 package com.seopseop.board.service.member;
 
+import com.seopseop.board.DTO.member.MemberSaveDTO;
 import com.seopseop.board.entity.member.Member;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,6 @@ public interface MemberService {
     void resign(Member member);
 
     Member findActiveMemberByUsername(String username);
+
+    Member signup(MemberSaveDTO memberSaveDTO);
 }

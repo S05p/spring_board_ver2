@@ -39,7 +39,7 @@ public class Comment extends JpaBaseTimeEntity {
     private Long orderNumber;
 
     @ManyToOne
-    @JoinColumn(name = "parent")
+    @JoinColumn(name = "parent_id")
     private Comment parent;
 
     @OneToMany(mappedBy = "parent")
