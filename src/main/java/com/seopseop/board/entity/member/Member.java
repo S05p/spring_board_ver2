@@ -38,6 +38,7 @@ public class Member extends JpaBaseTimeEntity {
         this.email = null;
         this.postCnt = 0L;
         this.commentCnt = 0L;
+        this.deletedTrue = false;
     }
 
     public Member(String username, String password, String nickname, String email) {
@@ -47,6 +48,14 @@ public class Member extends JpaBaseTimeEntity {
         this.email = email;
         this.postCnt = 0L;
         this.commentCnt = 0L;
+    }
+
+    public void passwordChange(String password) {
+        this.password = password;
+    }
+
+    public void resign() {
+        this.deletedTrue = true;
     }
 
     public void increasePostCnt() {

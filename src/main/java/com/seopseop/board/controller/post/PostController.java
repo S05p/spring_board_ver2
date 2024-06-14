@@ -10,6 +10,7 @@ import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.post.Post;
 import com.seopseop.board.repository.member.MemberRepository;
 import com.seopseop.board.repository.post.PostRepository;
+import com.seopseop.board.service.member.MemberService;
 import com.seopseop.board.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ public class PostController {
     private final PostRepository postRepository;
     private final PostService postService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @GetMapping("/list/{page}")
     public String List (@PathVariable Long page,
@@ -122,6 +124,7 @@ public class PostController {
             throw new NotAuthorOfPost();
         }
         postService.deletePost(post_id,member);
+        memberService.decreasePostCnt(member);
         redirectAttributes.addAttribute("redirectMessage","글이 성공적으로 삭제되었습니다.");
         return "redirect:"+referer;
     }

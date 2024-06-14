@@ -39,7 +39,29 @@ public class GlobalExceptionHandler {
                                          Model model) {
         model.addAttribute("errorMessage",ex.getMessage());
         return "error/notExist";
-
     }
 
+    @ExceptionHandler(NotAuthorityState.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleNotAuthorityState (NotAuthorityState ex,
+                                           Model model) {
+        model.addAttribute("errorMessage",ex.getMessage());
+        return "error/notExist";
+    }
+
+    @ExceptionHandler(Notequalpassword.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public String handleNotequalpassword (Notequalpassword ex,
+                                          Model model) {
+        model.addAttribute("errorMessage",ex.getMessage());
+        return "user/passwordchange.html";
+    }
+
+    @ExceptionHandler(NotExistMember.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotExistMember(NotExistMember ex,
+                                       Model model) {
+        model.addAttribute("errorMessage",ex.getMessage());
+        return "user/notExist";
+    }
 }

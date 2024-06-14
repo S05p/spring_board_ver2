@@ -1,6 +1,5 @@
 package com.seopseop.board.entity.comment;
 
-import com.seopseop.board.BoardApplication;
 import com.seopseop.board.entity.JpaBaseTimeEntity;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.post.Post;

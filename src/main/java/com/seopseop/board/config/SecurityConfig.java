@@ -21,7 +21,6 @@ public class SecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/user/login")
                         .defaultSuccessUrl("/list/1")
-                        .failureUrl("/user/login")
                 )
                 .logout((logout) -> logout.logoutUrl("/user/logout").logoutSuccessUrl("/list/1"));
         return http.build();

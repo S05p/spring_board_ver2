@@ -12,9 +12,11 @@
     <h4>마이페이지</h4>
     <p th:text="${user.username}"></p>
     <p th:text="${user.nickname}"></p>
-    <a href="/user/infochange">닉네임변경</a>
+    <a href="/user/update">닉네임변경</a>
     <a href="/user/passwordchange">비밀번호 변경</a>
 </div>
+
+<h3> 퉤! 니가 쓴글이다.</h3>
 
 <div class="card" th:each="i: ${results}" th:onclick="|location.href='/detail/${i.id}'|">
     <img src="https://placehold.co/300">
@@ -25,6 +27,7 @@
         <a th:href="'/delete/'+${i.id}">삭제</a>
     </div>
 </div>
+
 <div>
     <ul class="pagination">
         <!-- Previous button -->
@@ -37,7 +40,6 @@
             <a th:if="${pageNum != currentPage}" th:href="@{/user/mypage/{page}(page=${pageNum})}" th:text="${pageNum}"></a>
             <span th:if="${pageNum == currentPage}" th:text="${pageNum}" class="active"></span>
         </li>
-
         <!-- Next button -->
         <li th:if="${currentPage < totalPages}">
             <a th:href="@{/user/mypage/{page}(page=${currentPage + 10})}">다음 페이지</a>
