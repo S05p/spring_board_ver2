@@ -11,12 +11,10 @@ public class CommentSaveDTO {
     private String content;
     private Member comment_writer;
     private Post post;
-    private Comment parent;
 
-    public CommentSaveDTO(String content, Member comment_writer, Post post, Comment parent) {
+    public CommentSaveDTO(String content, Member comment_writer, Post post) {
         this.content = content;
         this.comment_writer = comment_writer;
         this.post = post;
-        this.parent = parent;
     }
 }

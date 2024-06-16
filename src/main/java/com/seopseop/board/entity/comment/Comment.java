@@ -54,7 +54,7 @@ public class Comment extends JpaBaseTimeEntity {
             this.depth = 0;
             this.orderNumber = post.getCommentCnt();
         } else {
-            this.depth = parent.getDepth()+1 ;
+            this.depth = Math.min(parent.getDepth()+1,5) ;
             this.orderNumber = parent.getOrderNumber();
         }
         this.deletedTime = null;

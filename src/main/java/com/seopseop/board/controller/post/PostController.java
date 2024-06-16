@@ -3,10 +3,7 @@ package com.seopseop.board.controller.post;
 import com.seopseop.board.DTO.comment.CommentSaveDTO;
 import com.seopseop.board.DTO.post.PostSaveDTO;
 import com.seopseop.board.DTO.post.PostUpdateDTO;
-import com.seopseop.board.Exception.NotAuthorOfPost;
-import com.seopseop.board.Exception.NotAuthoritytoCreatePostException;
-import com.seopseop.board.Exception.NotExistPageException;
-import com.seopseop.board.Exception.NotExistPostException;
+import com.seopseop.board.Exception.*;
 import com.seopseop.board.entity.comment.Comment;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.post.Post;
@@ -19,6 +16,7 @@ import com.seopseop.board.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
@@ -138,45 +136,67 @@ public class PostController {
 
     @GetMapping("/detail/{post_id}")
     public String GetDetail (@PathVariable Long post_id,
-                          Model model,
-                             Authentication auth) {
+                             Model model,
+                             Authentication auth,
+                             @RequestParam(value = "comment_page", defaultValue = "1") Long page) {
         Optional<Post> result = postRepository.findById(post_id);
         Post post = result.orElseThrow(()-> new NotExistPostException());
+        int a = page.intValue();
+        Page<Comment> results = commentService.pagingComment(post,PageRequest.of(a - 1, 5, Sort.by("id").descending()));
+
+        if (auth==null || !auth.isAuthenticated()) {
+            model.addAttribute("user",null);
+        } else {
+            model.addAttribute("user",auth.getName());
+        }
+        // pagination button
+        int totalPages = results.getTotalPages();
+        int currentPage = a;
+        int startPage = Math.max(1, currentPage - 5);
+        int endPage = Math.min(totalPages, currentPage + 4);
+        if (endPage - startPage < 9) {
+            if (startPage == 1) {
+                endPage = Math.min(startPage + 9, totalPages);
+            } else if (endPage == totalPages) {
+                startPage = Math.max(1, endPage - 9);
+            }
+        }
+        model.addAttribute("results", results.getContent());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("hasNext", results.hasNext());
+        model.addAttribute("hasPrevious", results.hasPrevious());
+
         model.addAttribute("post",post);
-        model.addAttribute("user",auth.getName());
+
         return "post/detail.html";
     }
 
-    @PostMapping("/detail/{post_id}/{comment_id}")
-    public String PostDetailComment (@PathVariable Long post_id,
-                              @PathVariable Long comment_id,
-                              @RequestParam String content,
-                              Authentication auth) {
-        if (auth == null || !auth.isAuthenticated()) {
-            throw new NotAuthorOfPost();
-        }
-        Optional<Member> result = memberRepository.findByUsername(auth.getName());
-        Member member = result.orElseThrow(() -> new NotExistPostException());
-        Post post = postService.findById(post_id);
-        Optional<Comment> com = commentRepository.findById(comment_id);
-        Comment com2 = com.orElseThrow(()-> new NotExistPostException());
-        CommentSaveDTO commentSaveDTO = new CommentSaveDTO(content,member,post,com2);
-        commentService.saveComment(commentSaveDTO);
-        return "redirect:/detail"+post_id;
-    }
     @PostMapping("/detail/{post_id}")
     public String PostDetail (@PathVariable Long post_id,
                               @RequestParam String content,
-                              Authentication auth) {
+                              Authentication auth,
+                              @RequestParam Long parent_comment_id,
+                              @RequestHeader(value = "Referer", required = false) String referer) {
         if (auth == null || !auth.isAuthenticated()) {
             throw new NotAuthorOfPost();
         }
         Optional<Member> result = memberRepository.findByUsername(auth.getName());
-        Member member = result.orElseThrow(() -> new NotExistPostException());
+        Member member = result.orElseThrow(() -> new NotAuthorityState());
         Post post = postService.findById(post_id);
-        CommentSaveDTO commentSaveDTO = new CommentSaveDTO(content,member,post,null);
-        commentService.saveComment(commentSaveDTO);
-        return "redirect:/detail/"+post_id;
+        if (parent_comment_id == 0L) {
+            Comment par = null;
+            CommentSaveDTO commentSaveDTO = new CommentSaveDTO(content,member,post);
+            commentService.saveComment(commentSaveDTO,par);
+        } else {
+            Optional<Comment> parent = commentRepository.findById(parent_comment_id);
+            Comment par = parent.orElseThrow(()-> new NotExistComment());
+            CommentSaveDTO commentSaveDTO = new CommentSaveDTO(content,member,post);
+            commentService.saveComment(commentSaveDTO,par);
+        }
+        return "redirect:"+referer;
     }
 
 

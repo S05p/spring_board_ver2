@@ -62,6 +62,10 @@ public class Post extends JpaBaseTimeEntity {
         this.deletedTime = LocalDateTime.now();
     }
 
+    public void increaseCommentCnt() {
+        this.commentCnt++;
+    }
+
     public void increaseLike () {
         this.likes++;
     }

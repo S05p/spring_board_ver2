@@ -64,4 +64,12 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage",ex.getMessage());
         return "user/notExist";
     }
+
+    @ExceptionHandler(NotExistComment.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotExistComment(NotExistComment ex,
+                                        Model model) {
+        model.addAttribute("errorMessage",ex.getMessage());
+        return "user/notExist";
+    }
 }
