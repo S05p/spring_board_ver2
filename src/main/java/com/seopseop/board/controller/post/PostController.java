@@ -16,10 +16,8 @@ import com.seopseop.board.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +37,13 @@ public class PostController {
 
     @GetMapping("/list/{page}")
     public String List (@PathVariable Long page,
-                        Model model) {
+                        Model model,
+                        Authentication auth) {
+
+        if (auth == null || !auth.isAuthenticated()) {
+        } else {
+            model.addAttribute("user",auth.getName());
+        }
         // page to int
         int a = page.intValue();
         // pageable
@@ -199,5 +203,33 @@ public class PostController {
         return "redirect:"+referer;
     }
 
+    @GetMapping("/search")
+    public String search (@RequestParam String keyword,
+                          @RequestParam(value = "page", defaultValue = "1") Long page,
+                          Model model) {
 
+        int a = page.intValue();
+        Page<Post> results = postRepository.findByKeyword(keyword,PageRequest.of(a-1,5,Sort.by("id").descending()));
+//        Page<Post> results = postService.findByKeyword(keyword,PageRequest.of(a-1,5,Sort.by("id").descending()));
+        int totalPages = results.getTotalPages();
+        int currentPage = a;
+        int startPage = Math.max(1, currentPage - 5);
+        int endPage = Math.min(totalPages, currentPage + 4);
+        if (endPage - startPage < 9) {
+            if (startPage == 1) {
+                endPage = Math.min(startPage + 9, totalPages);
+            } else if (endPage == totalPages) {
+                startPage = Math.max(1, endPage - 9);
+            }
+        }
+        model.addAttribute("results", results.getContent());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("hasNext", results.hasNext());
+        model.addAttribute("hasPrevious", results.hasPrevious());
+        model.addAttribute("keyword",keyword);
+        return "post/search.html";
+    }
 }

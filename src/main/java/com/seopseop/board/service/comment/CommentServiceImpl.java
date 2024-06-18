@@ -75,6 +75,7 @@ public class CommentServiceImpl implements CommentService{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qcomment.orderNumber.asc(),
+                        qcomment.parent.id.asc(),
                         qcomment.id.asc())
                 .fetchResults();
 

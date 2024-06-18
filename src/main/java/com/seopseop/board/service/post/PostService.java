@@ -35,4 +35,6 @@ public interface PostService {
     Long deletePost(Long post_id, Member writer);
 
     Page<Post> findAllActivePostByMember(String username, Pageable pageable);
+
+//    Page<Post> findByKeyword(String keyword, Pageable pageable);
 }

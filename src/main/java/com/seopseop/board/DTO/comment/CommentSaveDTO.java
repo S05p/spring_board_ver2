@@ -1,6 +1,5 @@
 package com.seopseop.board.DTO.comment;
 
-import com.seopseop.board.entity.comment.Comment;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.post.Post;
 import lombok.Data;
