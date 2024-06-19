@@ -4,7 +4,6 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seopseop.board.DTO.comment.CommentSaveDTO;
 import com.seopseop.board.Exception.NotAuthorityState;
-import com.seopseop.board.Exception.NotExistPageException;
 import com.seopseop.board.Exception.NotExistPostException;
 import com.seopseop.board.entity.comment.Comment;
 import com.seopseop.board.entity.comment.QComment;
@@ -17,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.provider.QueryComment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +33,6 @@ public class CommentServiceImpl implements CommentService{
     private final MemberRepository memberRepository;
     private final JPAQueryFactory queryFactory;
 
-    QComment qcomment = QComment.comment;
-
     @Override
     public Long saveComment(CommentSaveDTO commentSaveDTO, Comment parent) {
 
@@ -48,10 +46,14 @@ public class CommentServiceImpl implements CommentService{
             Optional<Comment> optionalComment = commentRepository.findById(parent.getId());
             Comment parentComment = optionalComment.get();
             Comment comment = new Comment(commentSaveDTO.getContent(),commentSaveDTO.getPost(),parentComment,commentSaveDTO.getComment_writer());
-            commentRepository.save(comment);
 
+            commentRepository.save(comment);
             member.increaseCommentCnt();
             post.increaseCommentCnt();
+
+            parentComment.repliesSet(comment);
+
+            commentRepository.save(parentComment);
 
             return comment.getId();
         } else {
@@ -69,13 +71,14 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Page<Comment> pagingComment(Post post, Pageable pageable) {
 
+        QComment qcomment = QComment.comment;
+
         QueryResults<Comment> results = queryFactory.selectFrom(qcomment)
                 .where(qcomment.deletedTrue.eq(false),
                         qcomment.post.eq(post))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qcomment.orderNumber.asc(),
-                        qcomment.parent.id.asc(),
                         qcomment.id.asc())
                 .fetchResults();
 

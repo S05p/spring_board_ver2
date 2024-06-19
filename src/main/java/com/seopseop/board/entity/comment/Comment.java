@@ -38,6 +38,7 @@ public class Comment extends JpaBaseTimeEntity {
     private Integer depth;
     private Long orderNumber;
 
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Comment parent;
@@ -78,4 +79,8 @@ public class Comment extends JpaBaseTimeEntity {
     public void decreaseLike () {
         this.likes--;
     }
+    public void repliesSet (Comment comment) {
+        this.replies.add(comment);
+    }
+
 }

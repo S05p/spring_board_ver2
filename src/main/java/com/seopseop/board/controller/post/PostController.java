@@ -39,7 +39,6 @@ public class PostController {
     public String List (@PathVariable Long page,
                         Model model,
                         Authentication auth) {
-
         if (auth == null || !auth.isAuthenticated()) {
         } else {
             model.addAttribute("user",auth.getName());

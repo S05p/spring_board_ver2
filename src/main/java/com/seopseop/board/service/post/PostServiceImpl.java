@@ -104,21 +104,4 @@ public class PostServiceImpl implements PostService{
 
         return new PageImpl<>(posts,pageable,total);
     }
-
-//    @Override
-//    public Page<Post> findByKeyword(String keyword, Pageable pageable) {
-//
-//        QPost qpost = QPost.post;
-//
-//        QueryResults<Post> results = queryFactory.selectFrom(qpost)
-//                .where(qpost.title.contains(keyword).or(qpost.content.contains(keyword)),qpost.deletedTrue.eq(false))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetchResults();
-//
-//        List<Post> posts = results.getResults();
-//        long total = results.getTotal();
-//
-//        return new PageImpl<>(posts,pageable,total);
-//    }
 }
