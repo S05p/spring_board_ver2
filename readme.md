@@ -16,6 +16,7 @@ MyPage에서 자신이 작성한 글들을 paging하여 볼 수 있도록 했습
 
 #### Search
 <img width="711" alt="스크린샷 2024-06-19 오후 3 39 27" src="https://github.com/S05p/spring_board_ver2/assets/121417498/c8d50b80-7bf3-465b-9df5-d86940ba1a3c">
+<br>
 검색 기능이 더 효율적으로 작동할 수 있도록 MySQL에 Full Text Index를 만들어 검색이 진행되도록 만들었습니다.
 
 ## Comment / ReComment
