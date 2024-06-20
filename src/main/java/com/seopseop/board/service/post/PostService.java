@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PostService {
 
@@ -36,5 +38,6 @@ public interface PostService {
 
     Page<Post> findAllActivePostByMember(String username, Pageable pageable);
 
-//    Page<Post> findByKeyword(String keyword, Pageable pageable);
+    // querydsl leftjoin 성능 테스트
+    List<Post> test ();
 }

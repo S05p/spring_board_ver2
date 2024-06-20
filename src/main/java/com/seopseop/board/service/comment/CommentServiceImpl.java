@@ -8,6 +8,7 @@ import com.seopseop.board.Exception.NotExistPostException;
 import com.seopseop.board.entity.comment.Comment;
 import com.seopseop.board.entity.comment.QComment;
 import com.seopseop.board.entity.member.Member;
+import com.seopseop.board.entity.member.QMember;
 import com.seopseop.board.entity.post.Post;
 import com.seopseop.board.repository.comment.CommentRepository;
 import com.seopseop.board.repository.member.MemberRepository;
@@ -74,6 +75,7 @@ public class CommentServiceImpl implements CommentService{
         QComment qcomment = QComment.comment;
 
         QueryResults<Comment> results = queryFactory.selectFrom(qcomment)
+                .leftJoin(qcomment.comment_writer,QMember.member)
                 .where(qcomment.deletedTrue.eq(false),
                         qcomment.post.eq(post))
                 .offset(pageable.getOffset())

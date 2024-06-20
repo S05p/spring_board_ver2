@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -94,6 +95,29 @@ public class PostController {
         Long postId = postService.savePost(postSaveDTO, auth.getName());
         redirectAttributes.addAttribute("successMessage", "글이 작성되었습니다");
         return "redirect:/detail/" + postId;
+    }
+
+    @GetMapping("/test")
+    public String test () {
+
+//        for (int i=1;i<500;i++) {
+//            String title = i+"번째 제목입니다.";
+//            String content = i+"번째 내용입니다.";
+//            PostSaveDTO postSaveDTO = new PostSaveDTO(title, content);
+//
+//            Long iL = Long.valueOf(i);
+//
+//            Optional<Member> member = memberRepository.findById(iL);
+//            Member member1 = member.get();
+//            Post post = new Post(title,content,member1);
+//
+//            postRepository.save(post);
+//
+//        }
+
+        postService.test();
+
+        return "redirect:/";
     }
 
     @GetMapping("/update/{post_id}")

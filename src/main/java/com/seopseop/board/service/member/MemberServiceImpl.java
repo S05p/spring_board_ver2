@@ -5,10 +5,13 @@ import com.seopseop.board.DTO.member.MemberSaveDTO;
 import com.seopseop.board.Exception.NotExistMember;
 import com.seopseop.board.entity.member.Member;
 import com.seopseop.board.entity.member.QMember;
+import com.seopseop.board.entity.post.QPost;
 import com.seopseop.board.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -59,4 +62,19 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.save(mem);
         return mem;
     }
+
+//    @Override
+//    public List<Member> test () {
+//
+//        QMember qMember = QMember.member;
+//        QPost qPost = QPost.post;
+//
+//        List<Member> allMember = queryFactory.selectFrom(qMember)
+//                .leftJoin(qMember.written_post,qPost)
+//                .limit(200L)
+//                .orderBy(qMember.id.desc())
+//                .fetch();
+//
+//        return allMember;
+//    }
 }

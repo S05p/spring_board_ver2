@@ -4,6 +4,8 @@ import com.seopseop.board.DTO.member.MemberSaveDTO;
 import com.seopseop.board.entity.member.Member;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MemberService {
 
@@ -18,4 +20,7 @@ public interface MemberService {
     Member findActiveMemberByUsername(String username);
 
     Member signup(MemberSaveDTO memberSaveDTO);
+
+    // querydsl leftjoin 성능 테스트
+//    List<Member> test ();
 }

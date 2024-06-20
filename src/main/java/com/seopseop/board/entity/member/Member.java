@@ -1,11 +1,14 @@
 package com.seopseop.board.entity.member;
 
 import com.seopseop.board.entity.JpaBaseTimeEntity;
+import com.seopseop.board.entity.post.Post;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +30,9 @@ public class Member extends JpaBaseTimeEntity {
 
     private Long postCnt;
     private Long commentCnt;
+
+    @OneToMany(mappedBy = "post_writer")
+    private List<Post> written_post;
 
     @Column(unique = true)
     private String email;

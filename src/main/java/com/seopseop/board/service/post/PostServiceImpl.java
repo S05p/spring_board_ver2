@@ -92,6 +92,7 @@ public class PostServiceImpl implements PostService{
         QPost post = QPost.post;
 
         QueryResults<Post> results = queryFactory.selectFrom(post)
+                .leftJoin(post.post_writer,member)
                 .where(post.post_writer.id.eq(mem.getId()),
                         post.deletedTrue.eq(false))
                 .offset(pageable.getOffset())
@@ -103,5 +104,20 @@ public class PostServiceImpl implements PostService{
         long total = results.getTotal();
 
         return new PageImpl<>(posts,pageable,total);
+    }
+
+    @Override
+    public List<Post> test () {
+
+        QPost qPost = QPost.post;
+        QMember qMember = QMember.member;
+
+        List<Post> results = queryFactory.selectFrom(qPost)
+//                .leftJoin(qPost.post_writer,qMember).fetchJoin()
+                .limit(50L)
+                .orderBy(qPost.id.desc())
+                .fetch();
+
+        return results;
     }
 }

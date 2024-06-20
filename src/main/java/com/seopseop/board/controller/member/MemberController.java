@@ -153,6 +153,23 @@ public class MemberController {
         model.addAttribute("hasPrevious", results.hasPrevious());
         model.addAttribute("user",member);
         return "member/mypage.html";
+    }
 
+    @GetMapping("/test")
+    public String test () {
+
+//        for (int i =1;i<500;i++) {
+//
+//            String username = "gang"+i;
+//            String password1 = "skfnxh12";
+//            String password = new BCryptPasswordEncoder().encode(password1);
+//            String nickname = "gang"+i;
+//            MemberSaveDTO memberSaveDTO = new MemberSaveDTO(username,password,nickname);
+//            memberService.signup(memberSaveDTO);
+//        }
+
+//        memberService.test();
+
+        return "redirect:/list/1";
     }
 }
